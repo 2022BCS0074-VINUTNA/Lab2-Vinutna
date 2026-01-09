@@ -4,8 +4,8 @@ import joblib
 import pandas as pd
 
 from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.ensemble import RandomForestRegressor
 
 # Create output folder
 os.makedirs("output", exist_ok=True)
@@ -17,16 +17,20 @@ X = df.drop("quality", axis=1)
 y = df["quality"]
 
 # -----------------------
-# EXP-04: Linear Regression with 70/30 split
+# EXP-05: Random Forest – 50 trees, max depth=10
 # -----------------------
 
 # Train-test split
 X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.3, random_state=42  # 70/30 split
+    X, y, test_size=0.2, random_state=42
 )
 
 # Model
-pipeline = LinearRegression()
+pipeline = RandomForestRegressor(
+    n_estimators=50,
+    max_depth=10,
+    random_state=42
+)
 
 # Train model
 pipeline.fit(X_train, y_train)
@@ -43,12 +47,10 @@ print("MSE:", mse)
 print("R2 Score:", r2)
 
 # Save model
-joblib.dump(pipeline, "output/model_EXP-04.pkl")
+joblib.dump(pipeline, "output/model_EXP-05.pkl")
 
 # Save metrics
 results = {
     "mse": mse,
     "r2_score": r2
 }
-
-
