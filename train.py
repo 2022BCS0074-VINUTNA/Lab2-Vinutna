@@ -17,7 +17,7 @@ X = df.drop("quality", axis=1)
 y = df["quality"]
 
 # -----------------------
-# EXP-05: Random Forest – 50 trees, max depth=10
+# EXP-06: Random Forest – 100 trees, max depth=15
 # -----------------------
 
 # Train-test split
@@ -27,8 +27,8 @@ X_train, X_test, y_train, y_test = train_test_split(
 
 # Model
 pipeline = RandomForestRegressor(
-    n_estimators=50,
-    max_depth=10,
+    n_estimators=100,
+    max_depth=15,
     random_state=42
 )
 
@@ -47,10 +47,11 @@ print("MSE:", mse)
 print("R2 Score:", r2)
 
 # Save model
-joblib.dump(pipeline, "output/model_EXP-05.pkl")
+joblib.dump(pipeline, "output/model_EXP-06.pkl")
 
 # Save metrics
 results = {
     "mse": mse,
     "r2_score": r2
 }
+
