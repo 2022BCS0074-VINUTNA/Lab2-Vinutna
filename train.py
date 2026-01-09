@@ -25,8 +25,11 @@ X_train, X_test, y_train, y_test = train_test_split(
 )
 
 
-# Experiment 1: Linear Regression Default
-pipeline = LinearRegression()
+# Experiment 2: Linear Regression + Standardization
+pipeline = Pipeline([
+    ("scaler", StandardScaler()),  # Standardization
+    ("model", LinearRegression())
+])
 
 
 
