@@ -18,18 +18,25 @@ df = pd.read_csv("dataset/winequality-red.csv", sep=";")
 
 X = df.drop("quality", axis=1)
 y = df["quality"]
+# Compute correlation matrix
+corr_matrix = X.corr().abs()
+# Select upper triangle of correlation matrix
+upper = corr_matrix.where(
+    pd.np.triu(pd.np.ones(corr_matrix.shape), k=1).astype(bool)
+)
 
-# Train-test split
+# Drop features with correlation > 0.9
+to_drop = [column for column in upper.columns if any(upper[column] > 0.9)]
+X_selected = X.drop(columns=to_drop)
+
 X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42  # 80/20 split for EXP-01
+    X_selected, y, test_size=0.2, random_state=42
 )
 
 
-# Experiment 2: Linear Regression + Standardization
-pipeline = Pipeline([
-    ("scaler", StandardScaler()),  # Standardization
-    ("model", LinearRegression())
-])
+
+pipeline = LinearRegression()
+
 
 
 
