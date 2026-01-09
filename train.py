@@ -2,7 +2,6 @@ import os
 import json
 import joblib
 import pandas as pd
-import numpy as np  # <-- added for correlation matrix computation
 
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
@@ -14,27 +13,16 @@ os.makedirs("output", exist_ok=True)
 # Load dataset
 df = pd.read_csv("dataset/winequality-red.csv", sep=";")
 
-# Features and target
 X = df.drop("quality", axis=1)
 y = df["quality"]
 
 # -----------------------
-# EXP-03: Correlation-based feature selection
+# EXP-04: Linear Regression with 70/30 split
 # -----------------------
 
-# Compute correlation matrix
-corr_matrix = X.corr().abs()
-
-# Select upper triangle
-upper = corr_matrix.where(np.triu(np.ones(corr_matrix.shape), k=1).astype(bool))
-
-# Drop features with correlation > 0.9
-to_drop = [column for column in upper.columns if any(upper[column] > 0.9)]
-X_selected = X.drop(columns=to_drop)
-
-# Train-test split (80/20)
+# Train-test split
 X_train, X_test, y_train, y_test = train_test_split(
-    X_selected, y, test_size=0.2, random_state=42
+    X, y, test_size=0.3, random_state=42  # 70/30 split
 )
 
 # Model
@@ -55,10 +43,12 @@ print("MSE:", mse)
 print("R2 Score:", r2)
 
 # Save model
-joblib.dump(pipeline, "output/model_EXP-03.pkl")
+joblib.dump(pipeline, "output/model_EXP-04.pkl")
 
 # Save metrics
 results = {
     "mse": mse,
     "r2_score": r2
 }
+
+
