@@ -26,14 +26,14 @@ node {
 
     stage('Read Accuracy') {
         def metrics = readJSON file: 'output/results.json'
-        CURRENT_ACCURACY = metrics.accuracy.toFloat()
+        CURRENT_ACCURACY = metrics.accuracy as Double
         echo "Current Accuracy: ${CURRENT_ACCURACY}"
     }
 
     stage('Compare Accuracy') {
         def baseline = 0.0
         withCredentials([string(credentialsId: 'best-accuracy', variable: 'BEST_ACC')]) {
-            baseline = BEST_ACC ? BEST_ACC.toFloat() : 0.0
+            baseline = BEST_ACC ? (BEST_ACC as Double) : 0.0
         }
 
         echo "Baseline Accuracy: ${baseline}"
